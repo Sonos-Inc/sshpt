@@ -24,14 +24,16 @@ import select
 import getpass
 from argparse import ArgumentParser
 
-from . import version
-from .sshpt import SSHPowerTool
+import version
+from sshpt import SSHPowerTool
+from SSHQueue import stopSSHQueue
+from OutputThread import stopOutputThread
 
 
 def option_parse(options):
     if options.outfile is None and options.verbose is False:
-        print "Error: You have not specified any mechanism to output results."
-        print "Please don't use quite mode (-q) without an output file (-o <file>)."
+        print("Error: You have not specified any mechanism to output results.")
+        print("Please don't use quite mode (-q) without an output file (-o <file>).")
         return 2
 
     return 0
@@ -39,7 +41,8 @@ def option_parse(options):
 
 def create_argument():
     usage = 'usage: sshpt [options] "[command1]" "[command2]" ...'
-    parser = ArgumentParser(usage=usage, version=version.__version__)
+    parser = ArgumentParser(usage=usage)
+    parser.add_argument('-v', '--version', action='version', version=version.__version__)
 
     host_group = parser.add_mutually_exclusive_group(required=True)
     host_group.add_argument("-f", "--file", dest="hostfile", default=None,
@@ -157,7 +160,7 @@ def main():
         elif sshpt.password is None:
             sshpt.password = getpass.getpass('Password: ')
             if sshpt.password == '':
-                print '\nPleas type the password'
+                print('\nPleas type the password')
                 return 2
         # This wierd little sequence of loops allows us to hit control-C
         # in the middle of program execution and get immediate results
@@ -165,13 +168,13 @@ def main():
         # Just to be safe we wait for the OutputThread to finish before moving on
         output_queue.join()
     except KeyboardInterrupt:
-        print 'caught KeyboardInterrupt, exiting...'
+        print('caught KeyboardInterrupt, exiting...')
         # Return code should be 1 if the user issues a SIGINT (control-C)
         return_code = 1
         # Clean up
         stopSSHQueue()
         stopOutputThread()
-    except Exception, detail:
+    except Exception as detail:
         print(str(detail))
         return_code = 2
         # Clean up

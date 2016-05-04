@@ -22,7 +22,12 @@ from Generic import GenericThread
 
 import datetime
 import threading
-import Queue
+import sys
+
+if sys.version_info[0] == 2:
+    import Queue as Queue
+else:
+    import queue as Queue
 
 
 class OutputThread(GenericThread):
@@ -47,7 +52,7 @@ class OutputThread(GenericThread):
     def printToStdout(self, string):
         """Prints 'string' if self.verbose is set to True"""
         if self.verbose is True:
-            print string
+            print(string)
 
     def writeOut(self, queueObj):
         """Write relevant queueObj information to stdout and/or to the outfile (if one is set)"""

@@ -1,2 +1,3 @@
-import sshpt.main
-sshpt.main.main()
+import main
+
+main.main()
