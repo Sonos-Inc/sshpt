@@ -40,8 +40,8 @@ from time import sleep
 import logging
 
 # Import Internal
-from OutputThread import startOutputThread, stopOutputThread
-from SSHQueue import startSSHQueue, stopSSHQueue
+from .OutputThread import startOutputThread, stopOutputThread
+from .SSHQueue import startSSHQueue, stopSSHQueue
 
 logger = logging.getLogger("sshpt")
 

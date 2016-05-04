@@ -24,10 +24,11 @@ import select
 import getpass
 from argparse import ArgumentParser
 
-import version
-from sshpt import SSHPowerTool
-from SSHQueue import stopSSHQueue
-from OutputThread import stopOutputThread
+from . import version
+from .sshpt import SSHPowerTool
+
+from .SSHQueue import stopSSHQueue
+from .OutputThread import stopOutputThread
 
 
 def option_parse(options):

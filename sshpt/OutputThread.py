@@ -18,7 +18,7 @@
 #
 #       http://www.gnu.org/licenses/gpl.html
 
-from Generic import GenericThread
+from .Generic import GenericThread
 
 import datetime
 import threading

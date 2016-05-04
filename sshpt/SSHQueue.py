@@ -18,7 +18,7 @@
 #
 #       http://www.gnu.org/licenses/gpl.html
 
-from Generic import GenericThread, normalizeString
+from .Generic import GenericThread, normalizeString
 
 import sys
 import os
