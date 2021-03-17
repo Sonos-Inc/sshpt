@@ -24,10 +24,7 @@ from __future__ import print_function
 import sys
 import select
 import getpass
-if sys.version_info[0] == 2:
-    from ConfigParser import SafeConfigParser
-else:
-    from configparser import SafeConfigParser
+from configparser import SafeConfigParser
 from argparse import ArgumentParser
 import logging
 
@@ -101,7 +98,7 @@ def create_argument():
     parser.add_argument("-P", "--port", dest="port", type=int, default=22, metavar="<port>",
         help="The port to be used when connecting.  Defaults to 22.")
     parser.add_argument("-u", "--username", dest="username", default=default_username, metavar="<username>",
-        help="The username to be used when connecting.  Defaults to the currently logged-in user [{}].".format(default_username))
+        help=f"The username to be used when connecting.  Defaults to the currently logged-in user [{default_username}].")
     parser.add_argument("-p", "--password", dest="password", default=None, metavar="<password>",
         help="The password to be used when connecting (not recommended--use an authfile unless the username and password are transient).")
     parser.add_argument("-q", "--quiet", action="store_false", dest="verbose", default=True,
@@ -170,20 +167,12 @@ def create_argument():
         credentials = open(options.authfile).readline()
         options.username, options.password = credentials.split(":")
         # Get rid of trailing newline
-        options.password = Password(password.rstrip('\n'))
+        options.password = Password(options.password.rstrip('\n'))
     options.sudo = 'root' if options.sudo is None else options.sudo
 
     # Get the username and password to use when checking hosts
     if options.username is None:
-        options.username = raw_input('Username: ')
-
-    # if keyfile is None, use the default, if it's the default-delimiter, set it to None
-    if options.keyfile is None:
-        options.keyfile = f"/home/{options.username}/.ssh/id_rsa"
-        print(f"using default keyfile: {options.keyfile}")
-    elif options.keyfile == "-":
-        options.keyfile = None
-
+        options.username = input('Username: ')
     if options.keyfile and options.keypass is None and not options.passwordless:
         options.keypass = Password(getpass.getpass('Passphrase: '))
     elif options.password is None and not options.passwordless:
